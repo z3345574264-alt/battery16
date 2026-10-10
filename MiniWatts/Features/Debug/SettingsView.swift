@@ -1,13 +1,11 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(PowerMonitor.self) private var monitor
-    @Environment(FloatingMeterController.self) private var floatingMeter
+    @EnvironmentObject private var monitor: PowerMonitor
+    @EnvironmentObject private var floatingMeter: FloatingMeterController
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        @Bindable var monitor = monitor
-        @Bindable var floatingMeter = floatingMeter
         NavigationStack {
             ZStack {
                 Backdrop(glow: .mwAccent, glowIntensity: 0.6)
@@ -27,18 +25,15 @@ struct SettingsView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 24)
-                    // Pinned to the container's width so nothing inside can widen the
-                    // scroll content. A paragraph inside an HStack reports an enormous
-                    // ideal width — the text unwrapped onto one line — and
-                    // `.frame(maxWidth: .infinity)` only expands, it does not clamp, so
-                    // that width propagates up and the page starts scrolling sideways.
-                    .containerRelativeFrame(.horizontal)
+                    // Keep text wrapped to the available scroll width so long labels cannot
+                    // make the page scroll sideways.
+                    .frame(maxWidth: .infinity).fixedSize(horizontal: false, vertical: true)
                 }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button("Done") { dismiss() }.tint(.mwAccent)
                 }
             }
