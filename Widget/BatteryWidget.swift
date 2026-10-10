@@ -389,14 +389,3 @@ struct InlineBatteryView: View {
     }
 }
 
-#Preview(as: .systemSmall) {
-    BatteryWidget()
-} timeline: {
-    BatteryEntry.preview
-}
-
-#Preview(as: .systemMedium) {
-    BatteryWidget()
-} timeline: {
-    BatteryEntry.preview
-}

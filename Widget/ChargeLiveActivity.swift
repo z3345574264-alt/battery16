@@ -301,22 +301,3 @@ private func formattedValue(
     return shortValue(for: metric, state: state)
 }
 
-#Preview("Lock Screen", as: .content,
-         using: ChargeActivityAttributes(startedAt: .now.addingTimeInterval(-1_800),
-                                         startPercent: 41)) {
-    ChargeLiveActivity()
-} contentStates: {
-    ChargeActivityContentState(
-        reading: ChargeReading(date: .now,
-                               percent: 72,
-                               externalConnected: true,
-                               isCharging: true,
-                               watts: 18.4,
-                               source: .charger,
-                               batteryTemperature: 33.6),
-        socTemperature: 39.2,
-        hottestTemperature: 41.3,
-        hottestSensorName: "PMU tdie1",
-        selectedMetric: .chargingPower
-    )
-}
