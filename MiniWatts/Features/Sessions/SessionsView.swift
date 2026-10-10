@@ -11,7 +11,7 @@ extension ChargeSession {
 }
 
 struct SessionsView: View {
-    @Environment(PowerMonitor.self) private var monitor
+    @EnvironmentObject private var monitor: PowerMonitor
     @State private var confirmingDelete = false
 
     var body: some View {
@@ -145,7 +145,7 @@ struct SessionRow: View {
 
 struct SessionDetailView: View {
     let session: ChargeSession
-    @Environment(PowerMonitor.self) private var monitor
+    @EnvironmentObject private var monitor: PowerMonitor
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -161,18 +161,15 @@ struct SessionDetailView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
-                // Pinned to the container's width so nothing inside can widen the
-                // scroll content. A paragraph inside an HStack reports an enormous
-                // ideal width — the text unwrapped onto one line — and
-                // `.frame(maxWidth: .infinity)` only expands, it does not clamp, so
-                // that width propagates up and the page starts scrolling sideways.
-                .containerRelativeFrame(.horizontal)
+                // Keep text wrapped to the available scroll width so long labels cannot
+                // make the page scroll sideways.
+                .frame(maxWidth: .infinity).fixedSize(horizontal: false, vertical: true)
             }
         }
         .navigationTitle(session.titleText)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button(role: .destructive) {
                     monitor.deleteSession(session)
                     dismiss()
