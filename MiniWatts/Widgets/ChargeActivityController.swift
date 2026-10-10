@@ -12,7 +12,7 @@ import Foundation
 ///   off an old number as live
 /// - it ends when the charger comes out — which, if that happens while the app is
 ///   suspended, the app only learns on its next tick. The stale date covers the gap,
-///   and the End button (`EndChargeActivityIntent`) lets the user close it meanwhile.
+///   while a paused activity remains visible until MiniWatts runs again or iOS removes it.
 final class ChargeActivityController {
     private var activity: Activity<ChargeActivityAttributes>?
     private var adopted = false
