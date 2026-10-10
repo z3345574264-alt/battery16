@@ -25,7 +25,7 @@ Apple ID — [Sideloadly](https://sideloadly.io), [AltStore](https://altstore.io
 [SideStore](https://sidestore.io) and Xcode all do this. A free Apple ID works; the app
 then expires after seven days and you re-sign it.
 
-Requires iPhone, iOS 17 or later.
+Requires iPhone, iOS 16.2 or later.
 
 Or add the source to SideStore or AltStore — including the SideStore bundled with
 LiveContainer — and install from there, so new versions show up as updates:
@@ -70,7 +70,7 @@ is the only reason the app declares audio playback at all.
 
 ## Build
 
-Xcode 26 or later, iOS 17 deployment target, no dependencies.
+Xcode 26 or later, iOS 16.2 deployment target, no dependencies.
 
 ```bash
 ./scripts/build-ipa.sh                             # unsigned, what Releases ships
