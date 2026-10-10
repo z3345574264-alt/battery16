@@ -1,18 +1,17 @@
 import Foundation
-import Observation
+import Combine
 
 /// Watches the system's own thermal verdict.
 ///
 /// This is public API, and it is what makes the temperature numbers mean
 /// something: when fast charging drops from 20 W to 10 W a few minutes in, the
 /// reason is usually that iOS moved past `.nominal` and started limiting current.
-@Observable
-final class ThermalMonitor {
-    private(set) var state: ProcessInfo.ThermalState = ProcessInfo.processInfo.thermalState
-    private(set) var lowPowerMode: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
+final class ThermalMonitor: ObservableObject {
+    @Published private(set) var state: ProcessInfo.ThermalState = ProcessInfo.processInfo.thermalState
+    @Published private(set) var lowPowerMode: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
     /// When the current thermal state was entered, so the UI can say how long
     /// throttling has been in effect.
-    private(set) var stateSince: Date = .now
+    @Published private(set) var stateSince: Date = .now
 
     /// Polled from `PowerMonitor`'s one-second tick rather than driven by
     /// `thermalStateDidChangeNotification`.

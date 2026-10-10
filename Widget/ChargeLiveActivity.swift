@@ -1,5 +1,4 @@
 import ActivityKit
-import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -216,15 +215,6 @@ struct ActivityFootnote: View {
             }
             Spacer(minLength: 6)
             Text("Since \(Text(context.attributes.startedAt, style: .time))")
-            // The one way to close the activity while MiniWatts is suspended or killed:
-            // iOS wakes the app to perform the intent.
-            Button(intent: EndChargeActivityIntent()) {
-                Label("End", systemImage: "xmark")
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 2)
-                    .background(Capsule().fill(palette.track))
-            }
-            .buttonStyle(.plain)
         }
         .font(.system(size: 12, weight: .medium))
         .foregroundStyle(palette.muted)
@@ -311,22 +301,3 @@ private func formattedValue(
     return shortValue(for: metric, state: state)
 }
 
-#Preview("Lock Screen", as: .content,
-         using: ChargeActivityAttributes(startedAt: .now.addingTimeInterval(-1_800),
-                                         startPercent: 41)) {
-    ChargeLiveActivity()
-} contentStates: {
-    ChargeActivityContentState(
-        reading: ChargeReading(date: .now,
-                               percent: 72,
-                               externalConnected: true,
-                               isCharging: true,
-                               watts: 18.4,
-                               source: .charger,
-                               batteryTemperature: 33.6),
-        socTemperature: 39.2,
-        hottestTemperature: 41.3,
-        hottestSensorName: "PMU tdie1",
-        selectedMetric: .chargingPower
-    )
-}

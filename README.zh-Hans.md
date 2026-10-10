@@ -19,7 +19,9 @@
 [AltStore](https://altstore.io)、[SideStore](https://sidestore.io) 和 Xcode 都可以。
 免费 Apple ID 可用，但应用 7 天后过期，需要重新签名。
 
-运行要求：iPhone，iOS 17 或更高版本。
+运行要求：iPhone，iOS 16.2 或更高版本。
+
+此 `ios16-compat` 分支用于 iOS 16 兼容适配；MiniWatts 官方主线仍要求 iOS 17。
 
 也可以在 SideStore 或 AltStore（包括 LiveContainer 自带的 SideStore）里添加这个源，从源里安装，之后新版本会作为更新出现：
 
@@ -43,7 +45,7 @@ MiniWatts 带有主屏幕与锁定屏幕小组件，以及充电时的实时活�
 
 ## 构建
 
-Xcode 26 或更高版本，iOS 17 部署目标，无第三方依赖。
+Xcode 26 或更高版本，iOS 16.2 部署目标，无第三方依赖。
 
 ```bash
 ./scripts/build-ipa.sh                             # 不签名，Releases 发布的就是这个
