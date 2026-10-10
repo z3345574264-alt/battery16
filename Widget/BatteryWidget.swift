@@ -76,7 +76,7 @@ struct BatteryWidgetView: View {
     var body: some View {
         let palette = WidgetPalette(scheme)
         content(palette)
-            .containerBackground(for: .widget) {
+            .background {
                 switch family {
                 case .systemSmall, .systemMedium:
                     LinearGradient(colors: [palette.canvasTop, palette.canvas],
