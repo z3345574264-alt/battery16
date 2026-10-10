@@ -134,11 +134,18 @@ final class FloatingMeterController: ObservableObject {
 
     private func renderLatest() {
         guard status != .unsupported, let sample = makeSample() else { return }
-        let renderer = layer.sampleBufferRenderer
-        // A failed renderer stays failed until it is flushed, and then swallows
-        // every frame in silence — which looks exactly like a frozen reading.
-        if renderer.status == .failed { renderer.flush() }
-        renderer.enqueue(sample)
+        // sampleBufferRenderer was added in iOS 17. Use the original display-layer
+        // enqueue API on iOS 16 so the floating meter still renders there.
+        if #available(iOS 17.0, *) {
+            let renderer = layer.sampleBufferRenderer
+            // A failed renderer stays failed until it is flushed, and then swallows
+            // every frame in silence — which looks exactly like a frozen reading.
+            if renderer.status == .failed { renderer.flush() }
+            renderer.enqueue(sample)
+        } else {
+            if layer.status == .failed { layer.flush() }
+            layer.enqueue(sample)
+        }
         hasPainted = true
 
         // Built here rather than in `start()`: `isPictureInPicturePossible` is the
