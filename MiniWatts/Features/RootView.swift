@@ -2,8 +2,8 @@ import SwiftUI
 import UIKit
 
 struct RootView: View {
-    @Environment(PowerMonitor.self) private var monitor
-    @Environment(FloatingMeterController.self) private var floatingMeter
+    @EnvironmentObject private var monitor: PowerMonitor
+    @EnvironmentObject private var floatingMeter: FloatingMeterController
     @Environment(\.scenePhase) private var scenePhase
     @State private var liveActivity = ChargeActivityController()
     @State private var widgets = WidgetPublisher()
@@ -48,7 +48,11 @@ struct RootView: View {
                 widgets.publish(reading, lastSession: monitor.sessions.first)
             }
         }
-        .onChange(of: scenePhase, initial: true) { _, phase in
+        .onAppear { handleScenePhase(scenePhase) }
+        .onChange(of: scenePhase) { phase in handleScenePhase(phase) }
+    }
+
+    private func handleScenePhase(_ phase: ScenePhase) {
             switch phase {
             case .active:
                 monitor.start()
@@ -71,7 +75,6 @@ struct RootView: View {
                 // incoming call. Nothing to do.
                 break
             }
-        }
     }
 }
 
@@ -111,12 +114,13 @@ private struct TabPage<Content: View>: View {
 /// second. Read in `RootView`'s body, it re-ran that body — and the tab view under
 /// it — on every tick; here it re-runs an empty view.
 private struct ScreenAwakeHolder: View {
-    @Environment(PowerMonitor.self) private var monitor
+    @EnvironmentObject private var monitor: PowerMonitor
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Color.clear
-            .onChange(of: shouldStayAwake, initial: true) { _, awake in
+            .onAppear { UIApplication.shared.isIdleTimerDisabled = shouldStayAwake }
+            .onChange(of: shouldStayAwake) { awake in
                 UIApplication.shared.isIdleTimerDisabled = awake
             }
     }
@@ -168,19 +172,16 @@ struct PageScaffold<Content: View>: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 4)
                     .padding(.bottom, 24)
-                    // Pinned to the container's width so nothing inside can widen the
-                    // scroll content. A paragraph inside an HStack reports an enormous
-                    // ideal width — the text unwrapped onto one line — and
-                    // `.frame(maxWidth: .infinity)` only expands, it does not clamp, so
-                    // that width propagates up and the page starts scrolling sideways.
-                    .containerRelativeFrame(.horizontal)
+                    // Keep text wrapped to the available scroll width so long labels cannot
+                    // make the page scroll sideways.
+                    .frame(maxWidth: .infinity).fixedSize(horizontal: false, vertical: true)
                 }
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 if let toolbar {
-                    ToolbarItem(placement: .topBarTrailing) { toolbar }
+                    ToolbarItem(placement: .navigationBarTrailing) { toolbar }
                 }
             }
         }
