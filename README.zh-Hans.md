@@ -21,6 +21,8 @@
 
 运行要求：iPhone，iOS 16.2 或更高版本。
 
+此 `ios16-compat` 分支用于 iOS 16 兼容适配；MiniWatts 官方主线仍要求 iOS 17。
+
 也可以在 SideStore 或 AltStore（包括 LiveContainer 自带的 SideStore）里添加这个源，从源里安装，之后新版本会作为更新出现：
 
 ```
